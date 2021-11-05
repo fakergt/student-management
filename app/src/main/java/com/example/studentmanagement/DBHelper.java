@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-class DBHelper  extends SQLiteOpenHelper {
+public class DBHelper  extends SQLiteOpenHelper {
 	final String LOG_TAG = "myLogs";
 	String [] FieldsN;	// fields names
 	int numberOfFields;

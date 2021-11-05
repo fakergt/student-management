@@ -3,54 +3,53 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-       tools:context=".MainActivity" >
+    tools:context=".MainActivity" >
 
 
-<LinearLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
-       
-       <Button
-           android:id="@+id/createDB"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:onClick="createDB"
-           android:text="CrDb" />
-       <Button
-           android:id="@+id/createTab"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:onClick="createTAB"
-           android:text="CrTab" />
+
         <Button
-           android:id="@+id/fillTab"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:onClick="fillTAB"
-           android:text="FillTab" />
-       
-        
-        
- </LinearLayout>      
+            android:id="@+id/createDB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="createDB"
+            android:text="CrDb" />
+        <Button
+            android:id="@+id/createTab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="createTAB"
+            android:text="CrTab" />
+        <Button
+            android:id="@+id/fillTab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="fillTAB"
+            android:text="FillTab" />
+        <Button
+            android:id="@+id/list49"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClick_List"
+            android:text="List49" />
+
+
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
- <TextView
-     android:id="@+id/textView1"
-     android:layout_width="match_parent"
-     android:layout_height="150dp"
-     android:text="@string/hello_world" />
- 
-    </LinearLayout>   
-  
-    
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/hello_world" />
 
-
-
-
-
+    </LinearLayout>
 </LinearLayout>
