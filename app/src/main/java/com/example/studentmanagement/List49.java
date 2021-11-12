@@ -18,9 +18,11 @@ import android.widget.TextView;
 public class List49 extends Activity {
 
     // имена атрибутов для Map
-    final String ATTRIBUTE_NAME_TEXT = "text";
-    final String ATTRIBUTE_NAME_VALUE = "value";
-    final String ATTRIBUTE_NAME_IMAGE = "image";
+    final String ATTRIBUTE_NAME_ID = "ids";
+    final String ATTRIBUTE_NAME_NAME = "names";
+    final String ATTRIBUTE_NAME_MASA = "masa";
+    final String ATTRIBUTE_NAME_VALUE = "values";
+    final String ATTRIBUTE_NAME_CAT = "cat";
 
     // картинки для отображения динамики
     final int positive = android.R.drawable.btn_plus;
@@ -28,34 +30,39 @@ public class List49 extends Activity {
 
     ListView lvSimple;
 
-    /** Called when the activity is first created. */
+    /**
+     * Called when the activity is first created.
+     */
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list49);
 
         Intent intent2 = getIntent();
+        ArrayList<Integer> ids = intent2.getIntegerArrayListExtra("ids");
         ArrayList<String> names = intent2.getStringArrayListExtra("names");
+        ArrayList<String> masa = intent2.getStringArrayListExtra("masa");
         ArrayList<Integer> values = intent2.getIntegerArrayListExtra("values");
+        ArrayList<Integer> cat = intent2.getIntegerArrayListExtra("cat");
 
         ArrayList<Map<String, Object>> data = new ArrayList<>(values.size());
         Map<String, Object> m;
         int img;
         for (int i = 0; i < values.size(); i++) {
             m = new HashMap<>();
-            m.put(ATTRIBUTE_NAME_TEXT, names.get(i));
+            m.put(ATTRIBUTE_NAME_ID, ids.get(i));
+            m.put(ATTRIBUTE_NAME_NAME, names.get(i));
+            m.put(ATTRIBUTE_NAME_MASA, masa.get(i));
             m.put(ATTRIBUTE_NAME_VALUE, values.get(i));
-            if (values.get(i) == 0) img = 0; else
-                img = (values.get(i) > 0) ? positive : negative;
-            m.put(ATTRIBUTE_NAME_IMAGE, img);
+            m.put(ATTRIBUTE_NAME_CAT, cat.get(i));
 
             data.add(m);
         }
 
         // массив имен атрибутов, из которых будут читаться данные
-        String[] from = { ATTRIBUTE_NAME_TEXT, ATTRIBUTE_NAME_VALUE,
-                ATTRIBUTE_NAME_IMAGE };
+        String[] from = {ATTRIBUTE_NAME_ID, ATTRIBUTE_NAME_NAME, ATTRIBUTE_NAME_MASA, ATTRIBUTE_NAME_VALUE,
+                ATTRIBUTE_NAME_CAT};
         // массив ID View-компонентов, в которые будут вставлять данные
-        int[] to = { R.id.tvText, R.id.tvValue, R.id.ivImg };
+        int[] to = {R.id.id, R.id.tvText, R.id.masa, R.id.tvValue, R.id.cat};
 
         // создаем адаптер
         MySimpleAdapter sAdapter = new MySimpleAdapter(this, data,

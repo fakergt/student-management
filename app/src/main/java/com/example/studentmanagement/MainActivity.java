@@ -38,8 +38,11 @@ public class MainActivity extends Activity {
     int numberOfTables;
     ArrayList<String> rows;
 
-    ArrayList<String> names = new ArrayList<String>();
-    ArrayList<Integer> values = new ArrayList<Integer>();
+    ArrayList<Integer> ids = new ArrayList<>();
+    ArrayList<String> names = new ArrayList<>();
+    ArrayList<String> masa = new ArrayList<>();
+    ArrayList<Integer> values = new ArrayList<>();
+    ArrayList<Integer> cat = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -227,8 +230,11 @@ public class MainActivity extends Activity {
     @SuppressLint("NonConstantResourceId")
     public void onClick_List(View v) {
         Intent intent = new Intent(this, List49.class);
+        intent.putIntegerArrayListExtra("ids", ids);
         intent.putStringArrayListExtra("names", names);
+        intent.putStringArrayListExtra("masa", masa);
         intent.putIntegerArrayListExtra("values", values);
+        intent.putIntegerArrayListExtra("cat", cat);
         startActivity(intent);
     }
 
@@ -257,12 +263,21 @@ public class MainActivity extends Activity {
                         }
                         nc++;
                         rr++;
+                        if (nc == 1) {
+                            ids.add(c.getInt(c.getColumnIndex(cn)));
+                        }
                         if (nc == 2) {
                             names.add(c.getString(c.getColumnIndex(cn)));
                             nr++;
                         }
+                        if (nc == 3) {
+                            masa.add(c.getString(c.getColumnIndex(cn)));
+                        }
                         if (nc == 4) {
                             values.add(c.getInt(c.getColumnIndex(cn)));
+                        }
+                        if (nc == 5) {
+                            cat.add(c.getInt(c.getColumnIndex(cn)));
                         }
 
                         Log.d("COLUMNS NR=", "nc=" + nc + ", rr=" + rr + ", nr=" + nr);
