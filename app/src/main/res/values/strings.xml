@@ -8,5 +8,8 @@
     <string name="textview">TextView</string>
     <string name="todo">TODO</string>
     <string name="ok">OK</string>
+    <string name="file">File</string>
+    <string name="create_new">create new</string>
+    <string name="open">open</string>
 
 </resources>

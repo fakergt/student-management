@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:id="@+id/create_db"
+        android:title="Create DB"/>
+    <item android:id="@+id/create_tab"
+        android:title="Create Tab"/>
+    <item android:id="@+id/fill_tab"
+        android:title="Fill tab" />
+    <item android:id="@+id/list49"
+        android:title="List 49" />
+</menu>

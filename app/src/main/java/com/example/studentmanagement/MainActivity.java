@@ -18,16 +18,20 @@ import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.studentmanagement.DBHelper;
 import com.example.studentmanagement.List49;
 import com.example.studentmanagement.R;
 
 @SuppressLint("SdCardPath")
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
     String DBName = "CatPrSalesSt";
 
     public DecimalFormat df = new DecimalFormat("#.##");
@@ -303,12 +307,10 @@ public class MainActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
 
-        menu.add("UpDate");
-        menu.add("IneqGraphSol");
-        menu.add("MovRotate");
-        menu.add("Grid");
-        menu.add("GraphFun");
-        return super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options_menu, menu);
+        return true;
+//        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -316,10 +318,28 @@ public class MainActivity extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        if (item.getTitle() == "Grid") {
 
+        Toast.makeText(this, "Selected Item: " +item.getTitle(), Toast.LENGTH_SHORT).show();
+        switch (item.getItemId()) {
+            case R.id.create_db:
+                createDB(null);
+                // do your code
+                return true;
+            case R.id.create_tab:
+                createTAB(null);
+                // do your code
+                return true;
+            case R.id.fill_tab:
+                fillTAB(null);
+                // do your code
+                return true;
+            case R.id.list49:
+                onClick_List(null);
+                // do your code
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 }
 
