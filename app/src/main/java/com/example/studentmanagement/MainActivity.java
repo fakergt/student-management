@@ -33,6 +33,8 @@ import com.example.studentmanagement.R;
 @SuppressLint("SdCardPath")
 public class MainActivity extends AppCompatActivity {
     String DBName = "CatPrSalesSt";
+    boolean isTableCreated = false;
+    boolean isTableFilled = false;
 
     public DecimalFormat df = new DecimalFormat("#.##");
     SQLiteDatabase db;
@@ -60,17 +62,15 @@ public class MainActivity extends AppCompatActivity {
         dbHelper = new DBHelper(this, DBName);
         db = dbHelper.getWritableDatabase();
         Log.d("Create DB=", "The DB " + DBName + "  was created OR Opened the exiting one!");
-        //db.execSQL("DROP TABLE IF EXISTS detbord");
-        //db.execSQL("DROP TABLE IF EXISTS bord");
+        Toast.makeText(this, "Created DataBase:", Toast.LENGTH_SHORT).show();
     }
 
     public String[] TableInfo(String fn) {
         String tab[] = new String[201];
         String tabN = fn;
-        rows = new ArrayList<String>();
+        rows = new ArrayList<>();
 
         try {
-            //File myFile = new File("/storage/extSdCard/"+tabN+".txt");
             File myFile = new File("/mnt/sdcard/" + tabN + ".txt");
             FileInputStream fIn = new FileInputStream(myFile);
             BufferedReader myReader = new BufferedReader(new InputStreamReader(fIn));
@@ -97,58 +97,64 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void createTAB(View v) {
-        String aDataRow = "";
-        String aBuffer = "";
-        String tt;
-        int nf;
-        String[] fieldsN = new String[10];
-        String[] fieldsT = new String[10];
-        //String [] tabNames=new String[10];
-        // Read the list of tables
-        String tn[] = new String[100];
-        // nt - the list of tables
-        tn[0] = "ProductsM";
-        //int nt=tn.length;
-        int nt = 1;
-        numberOfTables = nt;// nt - the count of tables
+        if (dbHelper != null) {
+            String aDataRow = "";
+            String aBuffer = "";
+            String tt;
+            int nf;
+            String[] fieldsN = new String[10];
+            String[] fieldsT = new String[10];
+            //String [] tabNames=new String[10];
+            // Read the list of tables
+            String tn[] = new String[100];
+            // nt - the list of tables
+            tn[0] = "ProductsM";
+            //int nt=tn.length;
+            int nt = 1;
+            numberOfTables = nt;// nt - the count of tables
 
-        Log.d("", "N=" + String.valueOf(nt) + "  Nume tabel=" + tn[0]);
+            Log.d("", "N=" + String.valueOf(nt) + "  Nume tabel=" + tn[0]);
 
-        //for(int i=0;i<nt;i++) tabNames[i]=tn[i];
-        tabNames[0] = "ProductsM";
-        for (int i = 0; i < nt; i++) {
-            boolean te = exists(tn[i]);
-            if (!te) {
-                String[] tfS = TableInfo(tn[i] + "s");
-                String[] tfC = TableInfo(tn[i]);
-                nf = 0;
-                while (tfS[nf] != null) nf++;
-                //nf=tfS.length;
-                Log.d("nf1=", "" + nf);
-                for (int j = 0; j < nf; j++) {
-                    String[] fields = tfS[j].split("\t");
-                    fieldsN[j] = fields[0];
-                    fieldsT[j] = fields[1];
-                }
-                Log.d("Tabelul : ", tn[i]);
-                Log.d("Fields", fieldsN[0] + " , " + fieldsT[0] + " , " + fieldsN[1] + " , " + fieldsT[1]);
+            //for(int i=0;i<nt;i++) tabNames[i]=tn[i];
+            tabNames[0] = "ProductsM";
+            for (int i = 0; i < nt; i++) {
+                boolean te = exists(tn[i]);
+                if (!te) {
+                    String[] tfS = TableInfo(tn[i] + "s");
+                    String[] tfC = TableInfo(tn[i]);
+                    nf = 0;
+                    while (tfS[nf] != null) nf++;
+                    //nf=tfS.length;
+                    Log.d("nf1=", "" + nf);
+                    for (int j = 0; j < nf; j++) {
+                        String[] fields = tfS[j].split("\t");
+                        fieldsN[j] = fields[0];
+                        fieldsT[j] = fields[1];
+                    }
+                    Log.d("Tabelul : ", tn[i]);
+                    Log.d("Fields", fieldsN[0] + " , " + fieldsT[0] + " , " + fieldsN[1] + " , " + fieldsT[1]);
 
-                // create table i
+                    // create table i
 
-                boolean tableExists = false;
 
-                Log.d("before try Table:", tn[i] + "   to create???   ");
-                try {
-                    // creating a table
-                    dbHelper.createT(db, tn[i], fieldsN, fieldsT, nf);
-                    tableExists = true;
+                    Log.d("before try Table:", tn[i] + "   to create???   ");
+                    try {
+                        // creating a table
+                        dbHelper.createT(db, tn[i], fieldsN, fieldsT, nf);
+                        isTableCreated = true;
+                        Toast.makeText(this, "Table was created:", Toast.LENGTH_SHORT).show();
 
-                    Log.d("Table:", "The  " + tn[i] + "   was created   ");
-                } catch (Exception e) {
-                    // /* fail */
-                    Log.d("Table:", "The table " + tn[i] + "  was existing, and was not created again   ");
+                        Log.d("Table:", "The  " + tn[i] + "   was created   ");
+                    } catch (Exception e) {
+                        // /* fail */
+                        isTableCreated = true;
+                        Log.d("Table:", "The table " + tn[i] + "  was existing, and was not created again   ");
+                        Toast.makeText(this, "Table was already created, so will not create it again:", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
+        } else {
+            Toast.makeText(this, "Table was not created, first create DB", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -159,87 +165,106 @@ public class MainActivity extends AppCompatActivity {
         try {
             c = db.query(table, null, null, null, null, null, null);
             tableExists = true;
+            isTableCreated = true;
             Log.d("About existing ", "The table " + table + "  exists! :))))");
         } catch (Exception e) {
             /* fail */
             Log.d("The table is missing", table + " doesn't exist :(((");
+            Toast.makeText(this, "Table does NOT exists:", Toast.LENGTH_SHORT).show();
         }
         return tableExists;
     }
 
     public void fillTAB(View v) {
-        String tabN;
-        for (int i = 0; i < numberOfTables; i++) {
-            tabN = tabNames[i];
-            boolean te = exists(tabN);
+        if (isTableCreated != false && dbHelper != null) {
+            String tabN;
+            for (int i = 0; i < numberOfTables; i++) {
+                tabN = tabNames[i];
+                boolean te = exists(tabN);
 
-            Log.d("Before if", tabN + "+  nrtab=" + numberOfTables);
+                Log.d("Before if", tabN + "+  nrtab=" + numberOfTables);
 
-            if (te) {  //if the tb exists then fill it
-                Log.d("Inside  if", "The table:  " + tabN + "   Exists");
-                //the table exests:  	//clear the table
-                db.delete(tabN, null, null);
-                Log.d("After delete", tabN);
-                //fill the table
-                String tt, tabContent;
-                int nf;
-                String[] tfC = TableInfo(tabN);
-                //int nr=tfC.length;
-                String[] fieldsN = tfC[0].split("\t");
-                String[] fieldsT = tfC[1].split("\t");
-                Log.d("After table content", tabN);
-                nf = fieldsN.length;
-                // insert rows
-                ContentValues cv = new ContentValues();
-                int sw;
-                double nnf;
-                //for (int j=2;j<nr;j++) //on rows nr=tfC.length;
-                int nrow = 0;
-                while (tfC[nrow] != null) nrow++;
-                Log.d("Number od rows=", "nrow=" + nrow);
-                int j = 2;
+                if (te) {  //if the tb exists then fill it
+                    Log.d("Inside  if", "The table:  " + tabN + "   Exists");
+                    //the table exests:  	//clear the table
+                    db.delete(tabN, null, null);
+                    Log.d("After delete", tabN);
+                    //fill the table
+                    String tt, tabContent;
+                    int nf;
+                    String[] tfC = TableInfo(tabN);
+                    //int nr=tfC.length;
+                    String[] fieldsN = tfC[0].split("\t");
+                    String[] fieldsT = tfC[1].split("\t");
+                    Log.d("After table content", tabN);
+                    nf = fieldsN.length;
+                    // insert rows
+                    ContentValues cv = new ContentValues();
+                    int sw;
+                    double nnf;
+                    //for (int j=2;j<nr;j++) //on rows nr=tfC.length;
+                    int nrow = 0;
+                    while (tfC[nrow] != null) nrow++;
+                    Log.d("Number od rows=", "nrow=" + nrow);
+                    int j = 2;
 
-                while (tfC[j] != null) {
-                    cv.clear();
-                    String[] rcd = tfC[j].toString().split("\t");
-                    for (int k = 0; k < nf; k++)// on fields nf=fieldsN.length;
-                    {
-                        sw = Integer.valueOf(fieldsT[k]);
-                        switch (sw) {
-                            case 1:
-                                cv.put(fieldsN[k], Integer.valueOf(rcd[k].toString()));
-                                break;
-                            case 2:
-                                cv.put(fieldsN[k], rcd[k].toString());
-                                break;
-                            default:
-                                break;
-                        }
-                    }// end of fields
-                    db.insert(tabN, null, cv);
-                    j++;
-                }  // end of rows
+                    while (tfC[j] != null) {
+                        cv.clear();
+                        String[] rcd = tfC[j].toString().split("\t");
+                        for (int k = 0; k < nf; k++)// on fields nf=fieldsN.length;
+                        {
+                            sw = Integer.valueOf(fieldsT[k]);
+                            switch (sw) {
+                                case 1:
+                                    cv.put(fieldsN[k], Integer.valueOf(rcd[k].toString()));
+                                    break;
+                                case 2:
+                                    cv.put(fieldsN[k], rcd[k].toString());
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }// end of fields
+                        db.insert(tabN, null, cv);
+                        j++;
+                    }  // end of rows
 
-                // show the table content
-                Log.d("Datele in tabel", "------" + tabN);
-                Cursor cc = null;
-                cc = db.query(tabN, null, null, null, null, null, null);
-                logCursor1(cc);
-                cc.close();
-                Log.d("Datele in tabel", "--- ---");
-            }// end of  if(te) (if the tb exists then fill it
-        }//  end of for(int i=0;i<numberOfTables;i++)
+                    // show the table content
+                    Log.d("Datele in tabel", "------" + tabN);
+                    Cursor cc = null;
+                    cc = db.query(tabN, null, null, null, null, null, null);
+                    logCursor1(cc);
+                    cc.close();
+                    Log.d("Datele in tabel", "--- ---");
+                    isTableFilled = true;
+                    Toast.makeText(this, "The table was filled:", Toast.LENGTH_SHORT).show();
+                }// end of  if(te) (if the tb exists then fill it
+            }//  end of for(int i=0;i<numberOfTables;i++)
+        } else if (dbHelper == null) {
+            Toast.makeText(this, "DataBase was not created:", Toast.LENGTH_LONG).show();
+        } else if (isTableCreated == false) {
+            Toast.makeText(this, "Table was not created:", Toast.LENGTH_LONG).show();
+        }
     }
 
     @SuppressLint("NonConstantResourceId")
     public void onClick_List(View v) {
-        Intent intent = new Intent(this, List49.class);
-        intent.putIntegerArrayListExtra("ids", ids);
-        intent.putStringArrayListExtra("names", names);
-        intent.putStringArrayListExtra("masa", masa);
-        intent.putIntegerArrayListExtra("values", values);
-        intent.putIntegerArrayListExtra("cat", cat);
-        startActivity(intent);
+        if (dbHelper != null && isTableCreated == true && isTableFilled == true) {
+            Intent intent = new Intent(this, List49.class);
+            intent.putIntegerArrayListExtra("ids", ids);
+            intent.putStringArrayListExtra("names", names);
+            intent.putStringArrayListExtra("masa", masa);
+            intent.putIntegerArrayListExtra("values", values);
+            intent.putIntegerArrayListExtra("cat", cat);
+            startActivity(intent);
+            Toast.makeText(this, "LIst49 listed:", Toast.LENGTH_SHORT).show();
+        } else if (dbHelper == null) {
+            Toast.makeText(this, "DataBase was not created:", Toast.LENGTH_LONG).show();
+        } else if (isTableCreated == false) {
+            Toast.makeText(this, "Table was not created:", Toast.LENGTH_LONG).show();
+        } else if (isTableFilled == false) {
+            Toast.makeText(this, "Table was not filled with data:", Toast.LENGTH_LONG).show();
+        }
     }
 
     // afisare in LOG din Cursor
@@ -319,7 +344,6 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
 
-        Toast.makeText(this, "Selected Item: " +item.getTitle(), Toast.LENGTH_SHORT).show();
         switch (item.getItemId()) {
             case R.id.create_db:
                 createDB(null);

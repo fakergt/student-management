@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">MyApp</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="hello_world">Aloha</string>
     <string name="action_settings">Settings</string>
     <string name="checkbox">CheckBox</string>
     <string name="textview">TextView</string>
