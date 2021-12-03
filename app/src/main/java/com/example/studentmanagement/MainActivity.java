@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
             int nt = 1;
             numberOfTables = nt;// nt - the count of tables
 
-            Log.d("", "N=" + String.valueOf(nt) + "  Nume tabel=" + tn[0]);
+            Log.d("", "N=" + nt + "  Nume tabel=" + tn[0]);
 
             //for(int i=0;i<nt;i++) tabNames[i]=tn[i];
             tabNames[0] = "ProductsM";
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             /* fail */
             Log.d("The table is missing", table + " doesn't exist :(((");
-            Toast.makeText(this, "Table does NOT exists:", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Table does NOT exists:", Toast.LENGTH_LONG).show();
         }
         return tableExists;
     }
